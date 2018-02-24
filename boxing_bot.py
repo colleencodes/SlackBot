@@ -1,6 +1,7 @@
 import os
 import time
 import re
+import random
 from slackclient import SlackClient
 
 #instantiate slack client
@@ -10,8 +11,22 @@ starterbot_id = None
 
 #constants
 RTM_READ_DELAY = 1 # 1 second elay between reading from RTM 
-EXAMPLE_COMMAND = "do"
+TRIGGER_COMMAND = "box"
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
+BOXING_MOVES = {
+    1: 'jab',
+    2: 'cross',
+    3: 'left hook',
+    4: 'right hook',
+    5: 'left uppercut',
+    6: 'rightrd',
+    8: 'slip backward',
+    9: 'roll under fo uppercut',
+    7: 'slip forwaward',
+    10: 'roll under backward',
+    11: 'duck',
+    12: 'step back'
+}
 
 def parse_bot_commands(slack_events):
     """
@@ -46,20 +61,21 @@ def  handle_command(command, channel):
         Executes bot command if the command is known
     """
     #default response is help text for the user
-    default_response = "Not sure what you mean. Try *{}*.".format(EXAMPLE_COMMAND)
+    default_response = "Ducked because I don't understand! Try *{}*.".format(TRIGGER_COMMAND)
 
     #Finds and executes the given command, fillingin the response
     response = None
 
     #where to implement bot's abilities
-    if command.startswith(EXAMPLE_COMMAND):
+    if command.startswith(TRIGGER_COMMAND):
+        boxing_move = BOXING_MOVES[random.randint(1, len(BOXING_MOVES))] + '!'
         response = "Write me some code!"
 
     #Sends response back to channel
     slack_client.api_call(
         "chat.postMessage",
         channel=channel,
-        text=response or default_response
+        text=boxing_move or default_response
     )
 
 if __name__ == "__main__":
