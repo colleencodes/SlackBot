@@ -14,3 +14,5 @@ Started the project yesterday, and got the first draft of it running today. Some
 * to create files from the command line, use `echo.><file_name>` (which is a file with one empty line) or `type nul > <file_name>` (0 byte file)
 <https://stackoverflow.com/questions/30011267/windows-equivalent-of-touch-i-e-the-node-js-way-to-create-an-index-html>
 * Of particular importance for this project, I found out that the acronym **RTM** stands for **Real Time Messages**!
+
+Converted first draft learning bot, to a boxing bot. When the bot is specifically mentioned followed by the work 'box', the bot will generate a random boxing move to return to the user.
