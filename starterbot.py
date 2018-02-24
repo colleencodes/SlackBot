@@ -11,7 +11,7 @@ starterbot_id = None
 #constants
 RTM_READ_DELAY = 1 # 1 second elay between reading from RTM 
 EXAMPLE_COMMAND = "do"
-MENTION_REGEX = "^@(|[WU].+?)>(.*)"
+MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
 
 def parse_bot_commands(slack_events):
     """
@@ -37,7 +37,7 @@ def parse_direct_mention(message_text):
     """
     matches = re.search(MENTION_REGEX, message_text)
 
-    #first group contains teh username, the second group contains the
+    #first group contains the username, the second group contains the
     #remaining message
     return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
 
@@ -63,8 +63,6 @@ def  handle_command(command, channel):
     )
 
 if __name__ == "__main__":
-    print(SlackClient(os.environ.get('SLACK_BOT_TOKEN')))
-    print(' ')
     if slack_client.rtm_connect(with_team_state=False):
         print("Starter Bot connected and running!")
         #read bot's user ID by calling web API method 'auth.test'
@@ -78,5 +76,3 @@ if __name__ == "__main__":
 
     else:
         print("Connection failed. Exception traceback printed above.")
-
-
