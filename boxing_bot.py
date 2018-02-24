@@ -13,16 +13,17 @@ starterbot_id = None
 RTM_READ_DELAY = 1 # 1 second elay between reading from RTM 
 TRIGGER_COMMAND = "box"
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
+# MENTION_R?EGEX = "^/box"
 BOXING_MOVES = {
     1: 'jab',
     2: 'cross',
     3: 'left hook',
     4: 'right hook',
     5: 'left uppercut',
-    6: 'rightrd',
+    6: 'right uppercut',
+    7: 'slip forward',
     8: 'slip backward',
-    9: 'roll under fo uppercut',
-    7: 'slip forwaward',
+    9: 'roll under forward',
     10: 'roll under backward',
     11: 'duck',
     12: 'step back'
@@ -37,6 +38,7 @@ def parse_bot_commands(slack_events):
         If its not found, then returns None, None.
     """
     for event in slack_events:
+        print(event)
         if event["type"] == "message" and not "subtype" in event:
             user_id, message = parse_direct_mention(event["text"])
             if user_id == starterbot_id:
@@ -63,15 +65,10 @@ def  handle_command(command, channel):
     #default response is help text for the user
     default_response = "Ducked because I don't understand! Try *{}*.".format(TRIGGER_COMMAND)
 
-    #Finds and executes the given command, fillingin the response
-    response = None
-
-    #where to implement bot's abilities
+    boxing_move = None
     if command.startswith(TRIGGER_COMMAND):
         boxing_move = BOXING_MOVES[random.randint(1, len(BOXING_MOVES))] + '!'
-        response = "Write me some code!"
 
-    #Sends response back to channel
     slack_client.api_call(
         "chat.postMessage",
         channel=channel,
@@ -80,7 +77,7 @@ def  handle_command(command, channel):
 
 if __name__ == "__main__":
     if slack_client.rtm_connect(with_team_state=False):
-        print("Starter Bot connected and running!")
+        print("Boxer Bot connected and running!")
         #read bot's user ID by calling web API method 'auth.test'
         starterbot_id = slack_client.api_call("auth.test")["user_id"]
         while True:
